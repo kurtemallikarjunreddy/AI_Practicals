@@ -1,0 +1,24 @@
+
+# Logical Inference using Propositional Logic
+
+# Facts
+rain = True
+road_wet = rain
+traffic_slow = road_wet
+
+# Rules
+if rain:
+    road_wet = True
+
+if road_wet:
+    traffic_slow = True
+
+# Display conclusions
+print("Is it raining?", rain)
+print("Is the road wet?", road_wet)
+print("Is traffic slow?", traffic_slow)
+
+# Logical inference
+if rain and road_wet:
+    print("Conclusion: Rain causes a wet road.")
+    print("Inference: Traffic may be slow.")
