@@ -1,0 +1,72 @@
+
+# Value Iteration in Grid World
+
+rows, cols = 3, 3
+goal = (2, 2)
+gamma = 0.9
+reward = -1
+
+# Initialize values
+V = [[0 for _ in range(cols)] for _ in range(rows)]
+
+actions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+# Value Iteration
+for iteration in range(50):
+    new_V = [row[:] for row in V]
+
+    for r in range(rows):
+        for c in range(cols):
+            if (r, c) == goal:
+                new_V[r][c] = 0
+                continue
+
+            values = []
+
+            for dr, dc in actions:
+                nr, nc = r + dr, c + dc
+
+                if 0 <= nr < rows and 0 <= nc < cols:
+                    values.append(reward + gamma * V[nr][nc])
+                else:
+                    values.append(reward + gamma * V[r][c])
+
+            new_V[r][c] = max(values)
+
+    V = new_V
+
+# Display values
+print("State Values:")
+for row in V:
+    print([round(value, 2) for value in row])
+
+# Extract policy
+print("\nOptimal Policy:")
+symbols = ["^", "v", "<", ">"]
+
+for r in range(rows):
+    policy_row = []
+
+    for c in range(cols):
+        if (r, c) == goal:
+            policy_row.append("G")
+            continue
+
+        best_value = float("-inf")
+        best_action = " "
+
+        for i, (dr, dc) in enumerate(actions):
+            nr, nc = r + dr, c + dc
+
+            if 0 <= nr < rows and 0 <= nc < cols:
+                value = reward + gamma * V[nr][nc]
+            else:
+                value = reward + gamma * V[r][c]
+
+            if value > best_value:
+                best_value = value
+                best_action = symbols[i]
+
+        policy_row.append(best_action)
+
+    print(policy_row)
