@@ -1,0 +1,33 @@
+
+# Blocks World using Goal-Stack Planning
+
+# Initial state
+on = {"A": "Table", "B": "A", "C": "Table"}
+
+# Goal: B should be on the table and A should be on B
+goal = [("On", "A", "B"), ("On", "B", "Table")]
+
+def show_state():
+    print("Current State:", on)
+
+print("Initial State:")
+show_state()
+
+# Step 1: Move C if needed to clear the workspace
+if on["B"] == "A":
+    on["B"] = "Table"
+    print("Action: Move B from A to Table")
+
+# Step 2: Place A on B
+if on["A"] == "Table" and on["B"] == "Table":
+    on["A"] = "B"
+    print("Action: Move A from Table to B")
+
+print("\nFinal State:")
+show_state()
+
+# Check goal
+if on["A"] == "B" and on["B"] == "Table":
+    print("Goal achieved!")
+else:
+    print("Goal not achieved.")
