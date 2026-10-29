@@ -1,0 +1,35 @@
+
+# Compare k-NN and Decision Tree
+
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+
+# Load toy dataset
+data = load_iris()
+X = data.data
+y = data.target
+
+# Split dataset into training and testing data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+# Train k-NN model
+knn = KNeighborsClassifier(n_neighbors=3)
+knn.fit(X_train, y_train)
+knn_pred = knn.predict(X_test)
+
+# Train Decision Tree model
+tree = DecisionTreeClassifier(random_state=42)
+tree.fit(X_train, y_train)
+tree_pred = tree.predict(X_test)
+
+# Compare accuracy
+print("k-NN Accuracy:",
+      round(accuracy_score(y_test, knn_pred) * 100, 2), "%")
+
+print("Decision Tree Accuracy:",
+      round(accuracy_score(y_test, tree_pred) * 100, 2), "%")
