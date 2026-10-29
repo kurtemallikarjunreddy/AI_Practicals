@@ -1,0 +1,42 @@
+
+# Map Coloring using Backtracking
+
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'C', 'D'],
+    'C': ['A', 'B', 'D'],
+    'D': ['B', 'C']
+}
+
+colors = ['Red', 'Green', 'Blue']
+assignment = {}
+
+def is_consistent(region, color):
+    for neighbor in graph[region]:
+        if assignment.get(neighbor) == color:
+            return False
+    return True
+
+def backtracking():
+    if len(assignment) == len(graph):
+        return True
+
+    region = next(r for r in graph if r not in assignment)
+
+    for color in colors:
+        if is_consistent(region, color):
+            assignment[region] = color
+
+            if backtracking():
+                return True
+
+            del assignment[region]
+
+    return False
+
+if backtracking():
+    print("Map Coloring Solution:")
+    for region, color in assignment.items():
+        print(region, ":", color)
+else:
+    print("No solution exists")
