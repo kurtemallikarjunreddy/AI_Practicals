@@ -1,0 +1,41 @@
+
+from pgmpy.models import DiscreteBayesianNetwork
+from pgmpy.factors.discrete import TabularCPD
+from pgmpy.inference import VariableElimination
+
+# Create network
+model = DiscreteBayesianNetwork([("Flu", "Fever")])
+
+# P(Flu): 0 = No, 1 = Yes
+cpd_flu = TabularCPD(
+    variable="Flu",
+    variable_card=2,
+    values=[[0.9], [0.1]]
+)
+
+# P(Fever | Flu): 0 = No, 1 = Yes
+cpd_fever = TabularCPD(
+    variable="Fever",
+    variable_card=2,
+    values=[
+        [0.8, 0.2],
+        [0.2, 0.8]
+    ],
+    evidence=["Flu"],
+    evidence_card=[2]
+)
+
+model.add_cpds(cpd_flu, cpd_fever)
+
+if model.check_model():
+    print("Bayesian Network created successfully.")
+
+    inference = VariableElimination(model)
+
+    result = inference.query(
+        variables=["Flu"],
+        evidence={"Fever": 1}
+    )
+
+    print("Probability of Flu when Fever is present:")
+    print(result)
